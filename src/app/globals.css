@@ -1,27 +1,59 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* Small devices (landscape phones, 320px and up) */
+@media (min-width: 320px) {
+    .sm\:p-4 {
+        padding: 1rem;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* Medium devices (tablets, 576px and up) */
+@media (min-width: 576px) {
+    .md\:p-8 {
+        padding: 2rem;
+    }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* Large devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+    .lg\:p-12 {
+        padding: 3rem;
+    }
+    
+    html, body {
+        font-size: 18px;
+    }
+    
+    .inset-0 {
+        padding: 4rem; 
+    }
+    
+    .grid-cols-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr)); 
+    }
+    
+    .flex-1 {
+        flex: 1;
+    }
 }
+
+/* Extra large devices (large desktops, 1040px and up) */
+@media (min-width: 1040px) {
+    .xl\:p-16 {
+        padding: 4rem;
+    }
+
+    .xl\:p-16 button {
+        margin-bottom: 4rem; 
+    }
+}
+
+/* Extra extra large devices (1200px and up) */
+@media (min-width: 1200px) {
+    .xxl\:p-24 {
+        padding: 6rem;
+    }
+}
+
