@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 import { z } from 'zod'
-import { FormDataSchema } from '../../app/models/schema'
+import { FormDataSchema } from '../../app/models/schema';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
