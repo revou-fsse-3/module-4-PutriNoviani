@@ -1,3 +1,3 @@
 
-export { default as Form } from "./Form";
-export { default as Category } from "./Category";
+export { default as Form } from "@/app/components/Form";
+export { default as Category } from "@/app/components/Form";
