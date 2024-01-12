@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { type FC } from "react";
-import { AuthService } from "../services";
+import { AuthService } from "@/app/services";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -29,10 +29,10 @@ const Navbar: FC<NavbarProps> = ({ user, setUser }) => {
               </li>
               <li>
                 <Link
-                  href="/category"
+                  href="/category/new"
                   className="text-md text-white bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600"
                 >
-                  Add Contact
+                  Add Category
                 </Link>
               </li>
               <li>

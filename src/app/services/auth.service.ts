@@ -1,8 +1,9 @@
 "use client"
 
 import { AuthType } from "@/app/types";
+import { ACCESS_TOKEN } from "@/app/utils/constants";
 
-// ...
+
 
 class AuthService {
   private static instance: AuthService;
@@ -59,16 +60,13 @@ class AuthService {
     }
   };
 
-  public getUser = async (token: string = process.env.ACCESS_TOKEN || ""): Promise<any> => {
-    if (!token) {
-        throw new Error("Token not provided");
-    }
+  public getUser = async (): Promise<any> => {
 
     const response = await fetch(`${this.apiUrl}/profile`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
     });
 
     return response.json();

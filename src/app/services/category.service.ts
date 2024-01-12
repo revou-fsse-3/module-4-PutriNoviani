@@ -1,4 +1,5 @@
-"use client";
+// @/app/services/CategoryService.ts
+import { ACCESS_TOKEN } from "@/app/utils/constants";
 
 class CategoryService {
   private static instance: CategoryService;
@@ -15,52 +16,53 @@ class CategoryService {
     return CategoryService.instance;
   }
 
-  public createCategory(data: { name: string; }, token: string): Promise<any> {
+  public createCategory = async (data: { name: string }, token: string): Promise<any> => {
+    console.log("Token before API call:", ACCESS_TOKEN);
     return fetch(`${this.apiUrl}/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
       },
       body: JSON.stringify(data),
     }).then((response) => response.json());
-  }
+  };
 
-  public updateCategory(id: string, data: { name: string; is_active: boolean }, token: string): Promise<any> {
+  public updateCategory = async (id: string, data: { name: string; is_active: boolean }): Promise<any> => {
     return fetch(`${this.apiUrl}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
       },
       body: JSON.stringify({ id, ...data }), // spread the data object
     }).then((response) => response.json());
-  }
+  };
 
-  public getCategoryByName(name: string, token: string): Promise<any> {
+  public getCategoryByName = async (name: string): Promise<any> => {
     return fetch(`${this.apiUrl}?page=1&name=${encodeURIComponent(name)}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
       },
     }).then((response) => response.json());
-  }
+  };
 
-  public getCategoryById(id: string, token: string): Promise<any> {
-    return fetch(`${this.apiUrl}/${id}`, {
+  public getCategoryById = async (userId: string): Promise<any> => {
+    return fetch(`${this.apiUrl}/${userId}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
       },
     }).then((response) => response.json());
-  }
+  };
 
-  public deleteCategory(id: string, token: string): Promise<any> {
+  public deleteCategory = async (id: string): Promise<any> => {
     return fetch(`${this.apiUrl}/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
       },
     }).then((response) => response.json());
-  }
+  };
 }
 
 export default CategoryService;

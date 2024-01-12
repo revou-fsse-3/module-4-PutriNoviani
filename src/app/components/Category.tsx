@@ -15,7 +15,7 @@ const Category: FC<Props> = ({ user }) => {
 
   useEffect(() => {
     if (user) {
-      categoryService.getCategoryByName("categoryName", user.$id).then(
+      categoryService.getCategoryById(user.$id).then(
         (res: any) => {
           setCategories(res.documents);
         },
@@ -34,7 +34,7 @@ const Category: FC<Props> = ({ user }) => {
       return;
     }
 
-    categoryService.deleteCategory(id, token).then(
+    categoryService.deleteCategory(id).then(
       (res: any) => {
         setCategories(categories.filter((category: any) => category.$id !== id));
         toast.success("Category deleted successfully!!");

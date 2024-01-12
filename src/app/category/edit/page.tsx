@@ -25,7 +25,7 @@ const EditCategoryPage: FC = () => {
       try {
         const userRes = await authService.getUser(); 
         setUser(userRes);
-        const categoryRes = await categoryService.getCategoryById(id, userRes?.token); 
+        const categoryRes = await categoryService.getCategoryById(id); 
         setData({
           id: categoryRes.$id,
           name: categoryRes.name,
@@ -60,7 +60,7 @@ const EditCategoryPage: FC = () => {
     }
 
     try {
-      await categoryService.updateCategory(id, { name, is_active: status }, token);
+      await categoryService.updateCategory(id, { name, is_active: status });
       toast.success("Contact updated successfully!!");
       router.push("/");
     } catch (err) {
