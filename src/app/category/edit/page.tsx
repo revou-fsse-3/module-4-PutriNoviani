@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Form } from "@/app/components";
 import Navbar from "@/app/components/Navbar";
 import type { ContactType } from "@/app/types";
+import { ACCESS_TOKEN_KEY } from "@/app/utils/constants";
 
 const EditCategoryPage: FC = () => {
   // Initialization
@@ -25,9 +26,9 @@ const EditCategoryPage: FC = () => {
       try {
         const userRes = await authService.getUser(); 
         setUser(userRes);
-        const categoryRes = await categoryService.getCategoryById(id); 
+        const categoryRes = await categoryService.getCategoryById(); 
         setData({
-          id: categoryRes.$id,
+          id: categoryRes.id,
           name: categoryRes.name,
           status: categoryRes.is_active,
         });
@@ -47,12 +48,12 @@ const EditCategoryPage: FC = () => {
     e.preventDefault();
     const { name, status }: ContactType = data;
 
-    if (!name) {
+    if (!name || !status) {
       toast.error("Please fill all fields");
       return;
     }
 
-    const token = user?.token;
+    const token = user?.token || ACCESS_TOKEN_KEY;
 
     if (!token) {
       console.error("Token not available");
@@ -109,7 +110,7 @@ const EditCategoryPage: FC = () => {
               placeholder: "Fullyworld Web Tutorials",
             },
             {
-              name: "status",
+              name: "is user active",
               type: "checkbox",
               placeholder: "Status",
             },

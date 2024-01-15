@@ -2,22 +2,29 @@ import { useState, FC, useEffect } from "react";
 import { CategoryService } from "@/app/services";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { ACCESS_TOKEN_KEY } from "../utils/constants";
 
 interface Props {
   user: any;
 }
 
+interface Category {
+  id: string;
+  name: string;
+  is_active: boolean;
+}
+
 const Category: FC<Props> = ({ user }) => {
   const categoryService = CategoryService.getInstance();
-
-  const [categories, setCategories] = useState<any>(null);
+  const [categories, setCategories] = useState<Category[] | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     if (user) {
-      categoryService.getCategoryById(user.$id).then(
+      categoryService.updateToken(localStorage.getItem(ACCESS_TOKEN_KEY) || "");
+      categoryService.getCategoryById().then(
         (res: any) => {
-          setCategories(res.documents);
+          setCategories(res.data);
         },
         (err: any) => {
           console.log(err);
@@ -27,7 +34,7 @@ const Category: FC<Props> = ({ user }) => {
   }, [user]);
 
   const handleDelete = (id: string) => {
-    const token = user?.token;
+    const token = user?.token || ACCESS_TOKEN_KEY;
 
     if (!token) {
       console.error("Token not available");
@@ -36,7 +43,9 @@ const Category: FC<Props> = ({ user }) => {
 
     categoryService.deleteCategory(id).then(
       (res: any) => {
-        setCategories(categories.filter((category: any) => category.$id !== id));
+        setCategories((prevCategories) =>
+          prevCategories ? prevCategories.filter((category) => category.id !== id) : null
+        );
         toast.success("Category deleted successfully!!");
       },
       (err: any) => {
@@ -54,23 +63,23 @@ const Category: FC<Props> = ({ user }) => {
       <table className="table-auto w-4/5 border-collapse">
         <thead className="bg-black  shadow-md text-white">
           <tr>
-          <th className=" px-4 py-5">ID</th>
-            <th className=" px-4 py-5">Name</th>
-            <th className=" px-4 py-5">Status</th>
-            <th className=" px-4 py-5">Actions</th>
+            <th className="px-4 py-5">ID</th>
+            <th className="px-4 py-5">Name</th>
+            <th className="px-4 py-5">Status</th>
+            <th className="px-4 py-5">Actions</th>
           </tr>
         </thead>
         <tbody className="border border-gray-200 divide-y divide-gray-200">
-          {!categories && (
+          {!categories ? (
             <tr>
-              <td colSpan={3} className=" px-4 py-5">
+              <td colSpan={3} className="px-4 py-5">
                 No Categories Found
               </td>
             </tr>
-          )}
-          {categories &&
-            categories.map((category: any) => (
-              <tr key={category.$id}>
+          ) : (
+            categories.map((category: Category) => (
+              <tr key={category.id}>
+                <td className="px-4 py-5 text-center">{category.id}</td>
                 <td className="px-4 py-5 text-center">{category.name}</td>
                 <td className="px-4 py-5 text-center">
                   {category.is_active ? "Active" : "Deactive"}
@@ -79,7 +88,7 @@ const Category: FC<Props> = ({ user }) => {
                   <button
                     onClick={() =>
                       router.push(
-                        `/category/${category.$id}/${category.name}/edit`
+                        `/category/edit`
                       )
                     }
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -87,14 +96,15 @@ const Category: FC<Props> = ({ user }) => {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(category.$id)}
+                    onClick={() => handleDelete(category.id)}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                   >
                     Delete
                   </button>
                 </td>
               </tr>
-            ))}
+            ))
+          )}
         </tbody>
       </table>
     </div>

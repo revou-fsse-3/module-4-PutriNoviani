@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Form } from "@/app/components";
 import { AuthService } from "@/app/services";
 import { AuthType } from "@/app/types";
+import { ACCESS_TOKEN_KEY } from "../utils/constants";
 
 const LoginPage = () => {
   const authService = AuthService.getInstance();
@@ -20,6 +21,7 @@ const LoginPage = () => {
 
     try {
       const res = await authService.loginUser({ email, password });
+      localStorage.setItem(ACCESS_TOKEN_KEY, res.data.token)
       toast.success("Login successful!!");
       // Set user state or perform any necessary action
       router.push("/");

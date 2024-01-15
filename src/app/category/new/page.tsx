@@ -6,8 +6,7 @@ import type { ContactType } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-// @/app/services/CategoryService.ts
-import { ACCESS_TOKEN } from "@/app/utils/constants";
+import { ACCESS_TOKEN_KEY } from "@/app/utils/constants";
 
 
 const AddCategoryPage = () => {
@@ -44,7 +43,7 @@ const AddCategoryPage = () => {
       return;
     }
 
-    const token = user?.token || ACCESS_TOKEN;
+    const token = user?.token || ACCESS_TOKEN_KEY;
 
 
     console.log("Token before calling createCategory:", token);
@@ -58,8 +57,8 @@ const AddCategoryPage = () => {
       await categoryService.createCategory({ name }, token);
       toast.success("Category added successfully!!");
 
-      const res = await categoryService.getCategoryById(user.$id);
-      setCategories(res.documents);
+      const res = await categoryService.getCategoryById();
+      setCategories(res.data);
 
       router.push("/");
     } catch (err) {

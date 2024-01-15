@@ -1,7 +1,8 @@
 "use client"
 
 import { AuthType } from "@/app/types";
-import { ACCESS_TOKEN } from "@/app/utils/constants";
+import { ACCESS_TOKEN_KEY } from "../utils/constants";
+
 
 
 
@@ -49,19 +50,8 @@ class AuthService {
     return response.json();
   };
 
-  public logoutUser = async (): Promise<void> => {
-    const response = await fetch(`${this.apiUrl}/logout`, {
-        method: "GET",
-    });
-    if (response.ok) {
-        window.location.href = '/';
-    } else {
-        console.error('Logout failed');
-    }
-  };
-
   public getUser = async (): Promise<any> => {
-
+    const ACCESS_TOKEN = localStorage.getItem(ACCESS_TOKEN_KEY)
     const response = await fetch(`${this.apiUrl}/profile`, {
       method: "GET",
       headers: {

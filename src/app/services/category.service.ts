@@ -1,12 +1,14 @@
 // @/app/services/CategoryService.ts
-import { ACCESS_TOKEN } from "@/app/utils/constants";
+import { ACCESS_TOKEN_KEY } from "../utils/constants";
 
 class CategoryService {
   private static instance: CategoryService;
   private apiUrl: string;
+  private token: string;
 
   private constructor() {
     this.apiUrl = "https://mock-api.arikmpt.com/api/category";
+    this.token = localStorage.getItem(ACCESS_TOKEN_KEY) || "";
   }
 
   public static getInstance(): CategoryService {
@@ -16,13 +18,16 @@ class CategoryService {
     return CategoryService.instance;
   }
 
+  public updateToken(token: string): void {
+    this.token = token;
+  }
+
   public createCategory = async (data: { name: string }, token: string): Promise<any> => {
-    console.log("Token before API call:", ACCESS_TOKEN);
     return fetch(`${this.apiUrl}/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        Authorization: `Bearer ${this.token}`,
       },
       body: JSON.stringify(data),
     }).then((response) => response.json());
@@ -33,7 +38,7 @@ class CategoryService {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        Authorization: `Bearer ${this.token}`,
       },
       body: JSON.stringify({ id, ...data }), // spread the data object
     }).then((response) => response.json());
@@ -42,15 +47,15 @@ class CategoryService {
   public getCategoryByName = async (name: string): Promise<any> => {
     return fetch(`${this.apiUrl}?page=1&name=${encodeURIComponent(name)}`, {
       headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        Authorization: `Bearer ${this.token}`,
       },
     }).then((response) => response.json());
   };
 
-  public getCategoryById = async (userId: string): Promise<any> => {
-    return fetch(`${this.apiUrl}/${userId}`, {
+  public getCategoryById = async (): Promise<any> => {
+    return fetch(`${this.apiUrl}`, {
       headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        Authorization: `Bearer ${this.token}`,
       },
     }).then((response) => response.json());
   };
@@ -59,7 +64,7 @@ class CategoryService {
     return fetch(`${this.apiUrl}/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        Authorization: `Bearer ${this.token}`,
       },
     }).then((response) => response.json());
   };

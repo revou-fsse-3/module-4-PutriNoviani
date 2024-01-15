@@ -4,6 +4,7 @@ import { AuthService } from "@/app/services";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ACCESS_TOKEN_KEY } from "../utils/constants";
 
 interface NavbarProps {
   user?: any;
@@ -12,7 +13,16 @@ interface NavbarProps {
 
 const Navbar: FC<NavbarProps> = ({ user, setUser }) => {
   const router = useRouter();
-  const authService = AuthService.getInstance();
+  const handleLogout = () => {
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    if (setUser) {
+      setUser(null);
+    }
+    router.push("/");
+    toast.success("Successfully logged out");
+
+  }
+
   return (
     <>
       <ToastContainer />
@@ -37,17 +47,7 @@ const Navbar: FC<NavbarProps> = ({ user, setUser }) => {
               </li>
               <li>
                 <button
-                  onClick={() =>
-                    authService.logoutUser().then(
-                      (res: any) => {
-                        setUser(null);
-                        toast.success("Logout successfull!!");
-                        router.push("/");
-                      },
-                      (err: any) => {
-                        console.log(err);
-                      }
-                    )
+                onClick={handleLogout
                   }
                   className="text-md text-white bg-red-500 px-4 py-2 rounded-md hover:bg-red-600"
                 >
